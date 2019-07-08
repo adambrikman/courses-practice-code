@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background: #018DED url(http://unsplash.it/1500/1000?image=881&blur=5);
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s ease-out;
+    }
+
+    .no-transition {
+      transition: none;
+    }
+
+    .hour-hand {
+      background: red;
+    }
+
+    .min-hand {
+      background: purple;
+    }
+
+    .second-hand {
+      background: white;
+    }
+
+  </style>
+
+  <script>
+
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+
+    function setDate() {
+      // Create new Date object
+      const now = new Date();
+
+      // Get seconds from Date object
+      const seconds = now.getSeconds();
+      const minutes = now.getMinutes();
+      const hours = now.getHours();
+
+    /* Convert seconds/minutes/hours to degrees
+    Note: The addition of 90 in each statmenet is to offset the initial rotation in the hand class in the CSS above */
+    function degrees(interval) {
+      if(interval == hours) {
+        /* Same as below but for hours */
+        return (((360/12) * interval) + 90);
+      } else {
+        /* Divide 360 degrees by 60 to arrive at degrees per second (or minute) and multiply by the number of seconds/minutes. */
+        return (((360/60)* interval) + 90);
+      }
+    }
+
+      // Update position of hands on the clock
+      secondHand.style.transform = `rotate(${degrees(seconds)}deg)`;
+      minuteHand.style.transform = `rotate(${degrees(minutes)}deg)`;
+      hourHand.style.transform = `rotate(${degrees(hours)}deg)`;
+    }
+
+    setInterval(setDate, 1000);
+
+  </script>
+</body>
+</html>
